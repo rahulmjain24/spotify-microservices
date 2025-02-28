@@ -1,1 +1,54 @@
+# General
+target/
+bin/
+out/
+tmp/
+logs/
+*.log
+*.tmp
+*.bak
+
+# IDE / Editors
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS-Specific
+.DS_Store
+Thumbs.db
+
+# Build Tools
+maven-wrapper.jar
+mvnw
+mvnw.cmd
+gradle-wrapper.jar
+
+# Environment
 .env
+*.env
+
+# Compiled Files
+*.class
+*.jar
+*.war
+*.ear
+
+# Test Reports
+test-output/
+surefire-reports/
+
+# Database Files
+.data/
+*.db
+*.sql
+*.h2.db
+
+# Spring Boot
+hs_err_pid*
+BOOT-INF/
+
+# Gradle (if applicable)
+.gradle/
+build/

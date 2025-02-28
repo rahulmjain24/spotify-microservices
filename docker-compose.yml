@@ -14,7 +14,7 @@ services:
     ports:
       - ${USER_DB_PORT}:5432
     volumes:
-      - ./user-db-data:/var/lib/postgresql/data
+      - ./.data/user-db-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
       interval: 10s
@@ -36,7 +36,7 @@ services:
     ports:
       - ${MUSIC_DB_PORT}:5432
     volumes:
-      - ./music-db-data:/var/lib/postgresql/data
+      - ./.data/music-db-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
       interval: 10s
@@ -49,17 +49,22 @@ services:
   user-service:
     build: ./user-service
     container_name: user-service
+    command: mvn spring-boot:run
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/${USER_DB_NAME}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SERVER_PORT: ${USER_PORT}
     ports:
       - ${USER_PORT}:${USER_PORT}
     volumes:
-      - ./user-service:/app
+      - ./user-service/src:/app/src
+      - ./user-service/test:/app/test
+      - ./user-service/mvnw:/app/mvnw
+      - ./user-service/mvnw.cmd:/app/mvnw.cmd
+      - ./user-service/pom.xml:/app/pom.xml
     depends_on:
       user-db:
         condition: service_healthy
@@ -67,25 +72,25 @@ services:
       - app-network
 
   # Music Service
-  music-service:
-    build: ./music-service
-    container_name: music-service
-    env_file:
-      - .env
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://music-db:5432/${MUSIC_DB_NAME}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      SERVER_PORT: ${MUSIC_PORT}
-    ports:
-      - ${MUSIC_PORT}:${MUSIC_PORT}
-    volumes:
-      - ./music-service:/app
-    depends_on:
-      music-db:
-        condition: service_healthy
-    networks:
-      - app-network
+  # music-service:
+  #   build: ./music-service
+  #   container_name: music-service
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://music-db:5432/${MUSIC_DB_NAME}
+  #     SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+  #     SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+  #     SERVER_PORT: ${MUSIC_PORT}
+  #   ports:
+  #     - ${MUSIC_PORT}:${MUSIC_PORT}
+  #   volumes:
+  #     - ./music-service:/app
+  #   depends_on:
+  #     music-db:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
 networks:
   app-network:
