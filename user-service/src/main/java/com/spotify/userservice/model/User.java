@@ -8,11 +8,8 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@EqualsAndHashCode(callSuper = true)
+public class User extends BaseModel {
     private String username;
     private String email;
     private String password;
