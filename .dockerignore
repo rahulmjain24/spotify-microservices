@@ -1,0 +1,12 @@
+# Ignore build and IDE artifacts
+target/
+bin/
+.idea/
+.vscode/
+node_modules/
+logs/
+.DS_Store
+*.class
+*.log
+.env
+*.env
